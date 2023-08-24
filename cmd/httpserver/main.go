@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/kuma-coffee/go-hexa-archi/config"
 	"github.com/kuma-coffee/go-hexa-archi/internal/core/services"
 	"github.com/kuma-coffee/go-hexa-archi/internal/handlers"
 	"github.com/kuma-coffee/go-hexa-archi/internal/repositories"
@@ -11,18 +12,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	username = "postgres"
-	password = "postgres"
-	dbName   = "test"
-	port     = 5432
-)
-
 func main() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+	config := config.LoadConfig()
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, username, password, dbName)
+		config.DB_HOST, config.DB_PORT, config.DB_USERNAME, config.DB_PASSWORD, config.DB_NAME)
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
